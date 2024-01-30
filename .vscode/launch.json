@@ -19,7 +19,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args":[doesntexist.csv]
+            "args":["doesntexist.csv"]
         },
         {
             "name": "launch with valid path",
@@ -28,7 +28,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args":[sales_data.csv]
+            "args":["sales_data.csv"]
         }
     ]
 }

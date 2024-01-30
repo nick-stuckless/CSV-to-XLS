@@ -1,7 +1,6 @@
-
-
 import sys
 import os
+from datetime import date
 
 def main():
     sales_csv = get_sales_csv()
@@ -10,7 +9,7 @@ def main():
 
 # Get path of sales data CSV file from the command line
 def get_sales_csv():
-    if len(sys.argv) <2:
+    if len(sys.argv) < 2:
         print("Incorrect parameters")
         sys.exit(1)
 
@@ -25,15 +24,21 @@ def get_sales_csv():
 # Create the directory to hold the individual order Excel sheets
 def create_orders_dir(sales_csv):
     # Get directory in which sales data CSV file resides
+    sales_csv_path = os.path.abspath(sales_csv)
+    sales_csv_dir = os.path.dirname(sales_csv_path)
     # Determine the name and path of the directory to hold the order data files
+    current_date = date.today().isoformat
     # Create the order directory if it does not already exist
+
     return 
 
 # Split the sales data into individual orders and save to Excel sheets
 def process_sales_data(sales_csv, orders_dir):
     # Import the sales data from the CSV file into a DataFrame
     # Insert a new "TOTAL PRICE" column into the DataFrame
+    insert()
     # Remove columns from the DataFrame that are not needed
+    drop()
     # Group the rows in the DataFrame by order ID
     # For each order ID:
         # Remove the "ORDER ID" column

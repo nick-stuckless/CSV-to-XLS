@@ -65,9 +65,20 @@ def process_sales_data(sales_csv, orders_dir):
         excel_path = os.path.join(orders_dir, excel_file)
 
         # Export the data to an Excel sheet
-        order_df.toexcel(excel_path, index=False)
+        sheet_name = f"{order_ID}"
+        order_df.to_excel(excel_path, index=False, sheet_name=sheet_name)
+
         # TODO: Format the Excel sheet
-    pass
+        Writer = pd.ExcelWriter({excel_path}, engine="xlsxwriter")
+        order_df.to_excel(Writer, index=False, sheet_name=sheet_name)
+        workbook = Writer.book
+        worksheet = Writer.sheets[{sheet_name}]
+        format1 = workbook.add_format({"num_format":"money format"})
+       # worksheet.set_column(firstc,lastc,width,format)
+
+
+        Writer.close()
+    pass 
 
 if __name__ == '__main__':
     main()

@@ -3,6 +3,8 @@ import os
 from datetime import date
 import pandas as pd
 
+
+
 def main():
     sales_csv = get_sales_csv()
     orders_dir = create_orders_dir(sales_csv)
@@ -39,28 +41,31 @@ def create_orders_dir(sales_csv):
 
 # Split the sales data into individual orders and save to Excel sheets
 def process_sales_data(sales_csv, orders_dir):
-    # Import the sales data from the CSV file into a DataFrame
+     # Import the sales data from the CSV file into a DataFrame
     sales_dataframe = pd.read_csv(sales_csv)
-    # Insert a new "TOTAL PRICE" column into the DataFrame
+     # Insert a new "TOTAL PRICE" column into the DataFrame
     sales_dataframe = sales_dataframe.insert(7, "TOTAL PRICE", sales_dataframe["ITEM QUANTITY"] * sales_dataframe["ITEM PRICE"])
-    # Remove columns from the DataFrame that are not needed
-    sales_dataframe.drop(columns=["ADDRESS", "CITY", "STATE", "COUNTRY", "POSTAL CODE"] inplace=True)
-    
+     # Remove columns from the DataFrame that are not needed
+    sales_dataframe.drop(columns= ["ADDRESS", "CITY", "STATE", "COUNTRY", "POSTAL CODE"], inplace=True)
+
     # Group the rows in the DataFrame by order ID
-    order_ID = sales_dataframe.sort_values(by="ORDER ID")
+    sales_dataframe = sales_dataframe.groupby("ORDER ID")
     # For each order ID:
-    for orders in order_ID:
+    for order_ID, order_df in sales_dataframe:
         # Remove the "ORDER ID" column
-        sales_dataframe = sales_dataframe.drop(orders)
+        order_df.drop(columns=["ORDER ID"], inplace=True)
         # Sort the items by item number
-        sales_dataframe = sales_dataframe.sort_values("ITEM NUMBER")
+        order_df.sort_values("ITEM NUMBER", inplace=True)
         # Append a "GRAND TOTAL" row
-        grand_total = sales_dataframe("TOTAL PRICE").sum()
-        sales_dataframe = sales_dataframe.append("GRAND TOTAL", {grand_total})
+        g_t = order_df["TOTAL PRICE"].sum()
+        g_t_df = pd.DataFrame({"ITEM PRICE":["GRAND TOTAL"], "TOTAL PRICE":[g_t]})
+        order_df = pd.concat([order_df, g_t_df])
         # Determine the file name and full path of the Excel sheet
+        excel_file = f"Order_{order_ID}.xlsx"
+        excel_path = os.path.join(orders_dir, excel_file)
 
         # Export the data to an Excel sheet
-
+        order_df.toexcel(excel_path, index=False)
         # TODO: Format the Excel sheet
     pass
 

@@ -5,6 +5,7 @@ import pandas as pd
 
 
 
+
 def main():
     sales_csv = get_sales_csv()
     orders_dir = create_orders_dir(sales_csv)
@@ -69,17 +70,17 @@ def process_sales_data(sales_csv, orders_dir):
         order_df.to_excel(excel_path, index=False, sheet_name=sheet_name)
 
         # TODO: Format the Excel sheet
-        Writer = pd.ExcelWriter({excel_path}, engine="xlsxwriter")
-        order_df.to_excel(Writer, index=False, sheet_name=sheet_name)
-        workbook = Writer.book
-        worksheet = Writer.sheets[{sheet_name}]
+        writer = pd.ExcelWriter({excel_path}, engine="xlsxwriter")
+        order_df.to_excel(writer, index=False, sheet_name=sheet_name)
+        workbook = writer.book
+        worksheet = writer.sheets[{sheet_name}]
         format1 = workbook.add_format({"num_format": "$#,##0.00;-$#,##0.00"})
         worksheet.set_column(6, 7, format1)
         worksheet.set_column(1, 8, 14)
         worksheet.set_column(9, 9, 25)
 
 
-        Writer.close()
+        writer.close()
     pass 
 
 if __name__ == '__main__':

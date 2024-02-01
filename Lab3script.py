@@ -44,9 +44,9 @@ def process_sales_data(sales_csv, orders_dir):
      # Import the sales data from the CSV file into a DataFrame
     sales_dataframe = pd.read_csv(sales_csv)
      # Insert a new "TOTAL PRICE" column into the DataFrame
-    sales_dataframe = sales_dataframe.insert(7, "TOTAL PRICE", sales_dataframe["ITEM QUANTITY"] * sales_dataframe["ITEM PRICE"])
+    sales_dataframe.insert(7, "TOTAL PRICE", sales_dataframe["ITEM QUANTITY"] * sales_dataframe["ITEM PRICE"])
      # Remove columns from the DataFrame that are not needed
-    sales_dataframe.drop(columns= ["ADDRESS", "CITY", "STATE", "COUNTRY", "POSTAL CODE"], inplace=True)
+    sales_dataframe.drop(columns=["ADDRESS", "CITY", "STATE", "COUNTRY", "POSTAL CODE"], inplace=True)
 
     # Group the rows in the DataFrame by order ID
     sales_dataframe = sales_dataframe.groupby("ORDER ID")
@@ -73,8 +73,10 @@ def process_sales_data(sales_csv, orders_dir):
         order_df.to_excel(Writer, index=False, sheet_name=sheet_name)
         workbook = Writer.book
         worksheet = Writer.sheets[{sheet_name}]
-        format1 = workbook.add_format({"num_format":"money format"})
-       # worksheet.set_column(firstc,lastc,width,format)
+        format1 = workbook.add_format({"num_format": "$#,##0.00;-$#,##0.00"})
+        worksheet.set_column(6, 7, format1)
+        worksheet.set_column(1, 8, 14)
+        worksheet.set_column(9, 9, 25)
 
 
         Writer.close()
